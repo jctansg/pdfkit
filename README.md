@@ -1,55 +1,59 @@
-# PDF Toolkit
+# Image Tools
 
-Free, private, browser-based PDF tools. All processing happens locally.
+Free, private, browser-based image utilities. Everything runs on your device — no sign-ups, no watermarks.
+
+## Live site
+
+No install needed — use the tools directly on GitHub Pages:
+
+- [Image Converter](https://jctansg.github.io/imagekit/convert.html)
+- [Background Remover](https://jctansg.github.io/imagekit/background.html)
 
 ## Tools
 
 | Tool | Description |
 |------|-------------|
-| [PDF Merge](merge.html) | Merge multiple PDFs into one file, reorder and rotate pages, and remove unwanted pages. |
-| [PDF Convert](convert.html) | Convert, compress, flatten and export PDFs — change PDF version, rasterize pages, and edit document metadata. |
-| [PDF Metadata Inspector](meta.html) | Inspect document properties, XMP metadata, page geometry and file integrity. |
+| [Image Converter](convert.html) | Convert images between PNG, JPEG, WebP, AVIF, GIF, BMP, TIFF, ICO and more. Resize and recompress on the fly, export as ZIP. |
+| [Background Remover](background.html) | Remove image backgrounds with an on-device AI model and get a clean transparent PNG. No uploads or watermarks; the model is cached after the first run. |
 
 ## Features
 
-- 100% client-side — files are never uploaded anywhere
-- Page-level editing: reorder, rotate, delete
-- Rasterize/flatten and version conversion via pdf-lib + pdf.js + jsPDF
+- Entirely client-side — images never leave your browser
+- Batch processing with ZIP export (JSZip)
+- AI background removal via `@imgly/background-removal` (WASM/ONNX, runs locally)
 - Installable PWA — `manifest.webmanifest` + `sw.js` for offline use
 
 ## Run locally
 
 ```bash
-cd pdf
+cd image
 python3 -m http.server 8000
 ```
 
-Open http://localhost:8000/merge.html (or convert.html / meta.html).
+Open http://localhost:8000/convert.html or http://localhost:8000/background.html.
 
-## Deploy to GitHub Pages
+Note: the background remover downloads an AI model (~tens of MB) on first use, then caches it.
 
-1. Push this folder to a new repository.
-2. Enable **Pages** (Deploy from branch → `main` / root).
-3. Available at `https://<user>.github.io/<repo>/merge.html`, `.../convert.html`, `.../meta.html`.
+## Self-host (optional)
 
-Any static host works — no build step. Libraries load from CDN (jsDelivr / cdnjs), so an internet connection is needed on first load.
+These are plain static files — clone the repo and serve the folder with any static server, or deploy it to any static host (Netlify, Vercel, Cloudflare Pages). No build step required.
+
+CDN dependencies load from jsDelivr, so an internet connection is needed on first load.
+
 
 ## Dependencies
 
 Loaded from CDN at runtime:
 
-- `pdf-lib` — PDF creation/manipulation
-- `pdfjs-dist` / `pdf.js` — PDF rendering and parsing
-- `jspdf` — PDF export (convert.html)
-- `jszip` — batch ZIP export (convert.html)
+- `jszip` — batch ZIP export
+- `@imgly/background-removal` — on-device background removal (background.html only)
 
 ## Structure
 
 ```
-pdf/
-├── merge.html            # Merge / reorder / rotate pages
-├── convert.html          # Convert, compress, flatten, metadata
-├── meta.html             # Metadata & integrity inspector
+image/
+├── convert.html          # Format converter / resizer
+├── background.html       # AI background remover
 ├── manifest.webmanifest  # PWA manifest
 ├── sw.js                 # Service worker (offline support)
 └── icon.svg              # App icon
